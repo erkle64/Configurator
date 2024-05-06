@@ -1,0 +1,11 @@
+{
+  "identifier": "erkle64.Configurator",
+  "displayName": "Configurator",
+  "assetBundles": [
+    "configurator.bundle"
+  ],
+  "assemblies": [
+    "Configurator.dll"
+  ]
+}
+
