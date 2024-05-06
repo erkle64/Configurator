@@ -84,3 +84,4 @@ E:\Development\CS\Configurator\Configurator\bin\Debug\net48\RFLib_DotNet_2018.dl
 E:\Development\CS\Configurator\Configurator\obj\Debug\net48\Configur.A5C02410.Up2Date
 E:\Development\CS\Configurator\Configurator\obj\Debug\net48\Configurator.dll
 E:\Development\CS\Configurator\Configurator\obj\Debug\net48\Configurator.pdb
+E:\Development\CS\Configurator\Configurator\obj\Debug\net48\Configurator.sourcelink.json
