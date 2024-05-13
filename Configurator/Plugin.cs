@@ -17,7 +17,7 @@ namespace Configurator
             MODNAME = "Configurator",
             AUTHOR = "erkle64",
             GUID = AUTHOR + "." + MODNAME,
-            VERSION = "0.1.0";
+            VERSION = "0.1.1";
 
         public static LogSource log;
 
@@ -179,7 +179,7 @@ namespace Configurator
                                     .PreferredWidth(350.0f)
                                     .FlexibleWidth(0.0f)
                                 .Done
-                                .Component_Text(entry.requiresRestart ? $"{entry.fullName}<color=red>*</color>" : entry.name, "OpenSansSemibold SDF", 16.0f, Color.white)
+                                .Component_Text(entry.requiresRestart ? $"{entry.name}<color=red>*</color>" : entry.name, "OpenSansSemibold SDF", 16.0f, Color.white)
                             .Done
                             .Element("Value")
                                 .Layout()
@@ -321,6 +321,29 @@ namespace Configurator
                                     }
                                 })
                             .Done
+                            .Do(extraBuilder =>
+                            {
+                                if (entry.description != null && entry.description.Length > 0)
+                                {
+                                    extraBuilder = extraBuilder
+                                        .Element("InfoWrapper")
+                                            .Layout()
+                                                .MinWidth(30.0f)
+                                                .PreferredWidth(30.0f)
+                                                .MinHeight(30.0f)
+                                                .PreferredHeight(30.0f)
+                                                .FlexibleWidth(0.0f)
+                                            .Done
+                                            .Element_Panel("Info", "icons8-info-512", Color.white, Vector4.zero, Image.Type.Simple)
+                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Do(infoBuilder =>
+                                                {
+                                                    infoBuilder.GameObject.AddComponent<TooltipTrigger>().tooltipText = string.Join("\n", entry.description);
+                                                })
+                                            .Done
+                                        .Done;
+                                }
+                            })
                         .Done;
                 }
             }
