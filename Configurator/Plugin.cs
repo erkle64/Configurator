@@ -17,7 +17,7 @@ namespace Configurator
             MODNAME = "Configurator",
             AUTHOR = "erkle64",
             GUID = AUTHOR + "." + MODNAME,
-            VERSION = "0.1.1";
+            VERSION = "0.1.2";
 
         public static LogSource log;
 
@@ -130,8 +130,57 @@ namespace Configurator
         {
             DestroyAllTransformChildren(_configFrame.transform);
 
+            var modVersion = "unknown";
+            if (configGUID == "erkle64.Unfoundry")
+            {
+                var versionConst = typeof(Unfoundry.Plugin).GetField("VERSION", BindingFlags.Public | BindingFlags.Static);
+                if (versionConst != null)
+                {
+                    var version = versionConst.GetValue(null) as string;
+                    if (version != null)
+                    {
+                        modVersion = version;
+                    }
+                }
+            }
+            else
+            {
+                var plugins = typeof(Unfoundry.Plugin).GetField("_unfoundryPlugins", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as Dictionary<string, UnfoundryPlugin>;
+                if (plugins != null)
+                {
+                    if (plugins.TryGetValue(configGUID, out var plugin))
+                    {
+                        var versionConst = plugin.GetType().GetField("VERSION", BindingFlags.Public | BindingFlags.Static);
+                        if (versionConst != null)
+                        {
+                            var version = versionConst.GetValue(null) as string;
+                            if (version != null)
+                            {
+                                modVersion = version;
+                            }
+                        }
+                    }
+                }
+            }
+
             var modConfig = Config.allConfigs[configGUID];
             var builder = UIBuilder.BeginWith(_configFrame)
+                .Element($"Version Row")
+                    .SetHorizontalLayout(new RectOffset(0, 0, 0, 0), 5.0f, TextAnchor.UpperLeft, false, true, true, false, true, false, false)
+                    .Layout()
+                        .PreferredHeight(30)
+                        .MinHeight(30)
+                        .FlexibleHeight(0)
+                    .Done
+                    .Element("Label")
+                        .Layout()
+                            .MinWidth(350.0f)
+                            .PreferredWidth(350.0f)
+                            .FlexibleWidth(0.0f)
+                        .Done
+                        .Component_Text($"Version: {modVersion}", "OpenSansSemibold SDF", 16.0f, Color.white)
+                    .Done
+                .Done
                 .Element($"Restart Notification Row")
                     .Keep(out var restartRow)
                     .SetHorizontalLayout(new RectOffset(0, 0, 0, 0), 5.0f, TextAnchor.UpperLeft, false, true, true, false, true, false, false)
