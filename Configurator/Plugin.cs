@@ -17,7 +17,7 @@ namespace Configurator
             MODNAME = "Configurator",
             AUTHOR = "erkle64",
             GUID = AUTHOR + "." + MODNAME,
-            VERSION = "0.1.2";
+            VERSION = "0.1.3";
 
         public static LogSource log;
 
@@ -107,7 +107,7 @@ namespace Configurator
                             .Done
                             .Element("Column Config")
                                 .Keep(out _configFrame)
-                                .SetVerticalLayout(new RectOffset(0, 0, 0, 0), 0.0f, TextAnchor.UpperLeft, false, true, true, true, false, false, false)
+                                .SetVerticalLayout(new RectOffset(0, 0, 0, 0), 8.0f, TextAnchor.UpperLeft, false, true, true, true, false, false, false)
                                 .Layout()
                                     .MinWidth(400.0f)
                                 .Done
@@ -216,10 +216,10 @@ namespace Configurator
                     if (entry.requiresRestart) requiresRestart = true;
                     builder = builder
                         .Element($"Entry Row {entry.fullName}")
-                            .SetHorizontalLayout(new RectOffset(0, 0, 0, 0), 5.0f, TextAnchor.UpperLeft, false, true, true, false, true, false, false)
+                            .SetHorizontalLayout(new RectOffset(0, 0, 0, 0), 5.0f, TextAnchor.MiddleLeft, false, true, true, false, true, false, false)
                             .Layout()
-                                .PreferredHeight(50)
-                                .MinHeight(50)
+                                .PreferredHeight(30)
+                                .MinHeight(30)
                                 .FlexibleHeight(0)
                             .Done
                             .Element("Label")
@@ -234,6 +234,7 @@ namespace Configurator
                                 .Layout()
                                     .FlexibleWidth(1.0f)
                                 .Done
+                                .SetHorizontalLayout(new RectOffset(0, 0, 0, 0), 5.0f, TextAnchor.MiddleLeft, false, true, true, false, true, false, false)
                                 .Do((UIBuilder valueBuilder) =>
                                 {
                                     //[typeof(bool)] Done
@@ -251,12 +252,12 @@ namespace Configurator
                                     //[typeof(decimal)]
                                     //[typeof(string)] Done
                                     //[typeof(Enum)] Done
-                                    //[typeof(Vector2)]
-                                    //[typeof(Vector3)]
-                                    //[typeof(Vector4)]
-                                    //[typeof(Vector2Int)]
-                                    //[typeof(Vector3Int)]
-                                    //[typeof(Vector4Int)]
+                                    //[typeof(Vector2)] Done
+                                    //[typeof(Vector3)] Done
+                                    //[typeof(Vector4)] Done
+                                    //[typeof(Vector2Int)] Done
+                                    //[typeof(Vector3Int)] Done
+                                    //[typeof(Vector4Int)] Done
                                     if (entry is TypedConfigEntry<bool> boolEntry)
                                     {
                                         var toggleObject = UnityEngine.Object.Instantiate(GetAsset<GameObject>("ConfigEntryToggle"), valueBuilder.GameObject.transform);
@@ -268,7 +269,10 @@ namespace Configurator
                                     {
                                         valueBuilder = valueBuilder
                                             .Element_InputField($"InputField {entry.fullName}", entry.ToString(), TMP_InputField.ContentType.Standard)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Layout()
+                                                    .PreferredHeight(30.0f)
+                                                    .MinHeight(30.0f)
+                                                .Done
                                                 .WithComponent<TMP_InputField>(inputField =>
                                                 {
                                                     inputField.onValueChanged.AddListener((value) => stringEntry.Set(value));
@@ -279,7 +283,10 @@ namespace Configurator
                                     {
                                         valueBuilder = valueBuilder
                                             .Element_InputField($"InputField {entry.fullName}", entry.ToString(), TMP_InputField.ContentType.IntegerNumber)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Layout()
+                                                    .PreferredHeight(30.0f)
+                                                    .MinHeight(30.0f)
+                                                .Done
                                                 .WithComponent<TMP_InputField>(inputField =>
                                                 {
                                                     inputField.onValueChanged.AddListener((value) => {
@@ -297,7 +304,10 @@ namespace Configurator
                                     {
                                         valueBuilder = valueBuilder
                                             .Element_InputField($"InputField {entry.fullName}", entry.ToString(), TMP_InputField.ContentType.IntegerNumber)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Layout()
+                                                    .PreferredHeight(30.0f)
+                                                    .MinHeight(30.0f)
+                                                .Done
                                                 .WithComponent<TMP_InputField>(inputField =>
                                                 {
                                                     inputField.onValueChanged.AddListener((value) => {
@@ -315,7 +325,10 @@ namespace Configurator
                                     {
                                         valueBuilder = valueBuilder
                                             .Element_InputField($"InputField {entry.fullName}", entry.ToString(), TMP_InputField.ContentType.DecimalNumber)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Layout()
+                                                    .PreferredHeight(30.0f)
+                                                    .MinHeight(30.0f)
+                                                .Done
                                                 .WithComponent<TMP_InputField>(inputField =>
                                                 {
                                                     inputField.onValueChanged.AddListener((value) => {
@@ -333,7 +346,10 @@ namespace Configurator
                                     {
                                         valueBuilder = valueBuilder
                                             .Element_InputField($"InputField {entry.fullName}", entry.ToString(), TMP_InputField.ContentType.DecimalNumber)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .Layout()
+                                                    .PreferredHeight(30.0f)
+                                                    .MinHeight(30.0f)
+                                                .Done
                                                 .WithComponent<TMP_InputField>(inputField =>
                                                 {
                                                     inputField.onValueChanged.AddListener((value) => {
@@ -368,6 +384,82 @@ namespace Configurator
                                             }
                                         });
                                     }
+                                    else if (entry is TypedConfigEntry<Vector2> vector2Entry)
+                                    {
+                                        valueBuilder = valueBuilder
+                                            .Element_CustomEditorFloat("X",
+                                                () => vector2Entry.Get().x,
+                                                (value) => { vector2Entry.Set(new Vector2(value, vector2Entry.Get().y)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("Y",
+                                                () => vector2Entry.Get().y,
+                                                (value) => { vector2Entry.Set(new Vector2(vector2Entry.Get().x, value)); })
+                                            .Done;
+                                    }
+                                    else if (entry is TypedConfigEntry<Vector3> vector3Entry)
+                                    {
+                                        valueBuilder = valueBuilder
+                                            .Element_CustomEditorFloat("X",
+                                                () => vector3Entry.Get().x,
+                                                (value) => { vector3Entry.Set(new Vector3(value, vector3Entry.Get().y, vector3Entry.Get().z)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("Y",
+                                                () => vector3Entry.Get().y,
+                                                (value) => { vector3Entry.Set(new Vector3(vector3Entry.Get().x, value, vector3Entry.Get().z)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("Z",
+                                                () => vector3Entry.Get().z,
+                                                (value) => { vector3Entry.Set(new Vector3(vector3Entry.Get().x, vector3Entry.Get().y, value)); })
+                                            .Done;
+                                    }
+                                    else if (entry is TypedConfigEntry<Vector4> vector4Entry)
+                                    {
+                                        valueBuilder = valueBuilder
+                                            .Element_CustomEditorFloat("X",
+                                                () => vector4Entry.Get().x,
+                                                (value) => { vector4Entry.Set(new Vector4(value, vector4Entry.Get().y, vector4Entry.Get().z, vector4Entry.Get().w)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("Y",
+                                                () => vector4Entry.Get().y,
+                                                (value) => { vector4Entry.Set(new Vector4(vector4Entry.Get().x, value, vector4Entry.Get().z, vector4Entry.Get().w)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("Z",
+                                                () => vector4Entry.Get().z,
+                                                (value) => { vector4Entry.Set(new Vector4(vector4Entry.Get().x, vector4Entry.Get().y, value, vector4Entry.Get().w)); })
+                                            .Done
+                                            .Element_CustomEditorFloat("W",
+                                                () => vector4Entry.Get().w,
+                                                (value) => { vector4Entry.Set(new Vector4(vector4Entry.Get().x, vector4Entry.Get().y, vector4Entry.Get().z, value)); })
+                                            .Done;
+                                    }
+                                    else if (entry is TypedConfigEntry<Vector2Int> vector2IntEntry)
+                                    {
+                                        valueBuilder = valueBuilder
+                                            .Element_CustomEditorInt("X",
+                                                () => vector2IntEntry.Get().x,
+                                                (value) => { vector2IntEntry.Set(new Vector2Int(value, vector2IntEntry.Get().y)); })
+                                            .Done
+                                            .Element_CustomEditorInt("Y",
+                                                () => vector2IntEntry.Get().y,
+                                                (value) => { vector2IntEntry.Set(new Vector2Int(vector2IntEntry.Get().x, value)); })
+                                            .Done;
+                                    }
+                                    else if (entry is TypedConfigEntry<Vector3Int> vector3IntEntry)
+                                    {
+                                        valueBuilder = valueBuilder
+                                            .Element_CustomEditorInt("X",
+                                                () => vector3IntEntry.Get().x,
+                                                (value) => { vector3IntEntry.Set(new Vector3Int(value, vector3IntEntry.Get().y, vector3IntEntry.Get().z)); })
+                                            .Done
+                                            .Element_CustomEditorInt("Y",
+                                                () => vector3IntEntry.Get().y,
+                                                (value) => { vector3IntEntry.Set(new Vector3Int(vector3IntEntry.Get().x, value, vector3IntEntry.Get().z)); })
+                                            .Done
+                                            .Element_CustomEditorInt("Z",
+                                                () => vector3IntEntry.Get().z,
+                                                (value) => { vector3IntEntry.Set(new Vector3Int(vector3IntEntry.Get().x, vector3IntEntry.Get().y, value)); })
+                                            .Done;
+                                    }
                                 })
                             .Done
                             .Do(extraBuilder =>
@@ -384,7 +476,7 @@ namespace Configurator
                                                 .FlexibleWidth(0.0f)
                                             .Done
                                             .Element_Panel("Info", "icons8-info-512", Color.white, Vector4.zero, Image.Type.Simple)
-                                                .SetRectTransform(0, 10, 0, -10, 0.5f, 0.5f, 0, 0, 1, 1)
+                                                .SetRectTransform(0, 0, 0, 0, 0.5f, 0.5f, 0, 0, 1, 1)
                                                 .Do(infoBuilder =>
                                                 {
                                                     infoBuilder.GameObject.AddComponent<TooltipTrigger>().tooltipText = string.Join("\n", entry.description);
